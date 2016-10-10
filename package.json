@@ -1,0 +1,22 @@
+{
+  "name": "create-lib",
+  "version": "1.0.0",
+  "description": "node cli tool to avoid boilerplate",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sniphpet/create-lib.git"
+  },
+  "author": "Fadi Khadra",
+  "license": "MIT",
+  "bin": {
+    "create-lib": "index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/sniphpet/create-lib/issues"
+  },
+  "homepage": "https://github.com/sniphpet/create-lib#readme"
+}
