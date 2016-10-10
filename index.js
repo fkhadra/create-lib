@@ -6,7 +6,8 @@ const path = require('path');
 const projectName = process.argv.slice(2)[0];
 const pathName = path.join(__dirname, projectName);
 
-const dirToCreate = ['src', 'lib', 'scripts'];
+const dirToCreate = ['src', 'lib', 'scripts', 'test'];
+
 
 function dirExist(dir) {
   try {
@@ -23,7 +24,10 @@ if (! dirExist(pathName)) {
   throw new Error(`Cannot create ${projectName}, the directory already exist.`);
 }
 
-process.chdir(pathName);
+fs.readFile(path.join(__dirname, 'resources', '.babelrc'), 'utf8', (err, data) => {
+  console.log(data);
+});
+//process.chdir(pathName);
 
-dirToCreate.forEach(dir => fs.mkdirSync(dir));
+//dirToCreate.forEach(dir => fs.mkdirSync(dir));
 

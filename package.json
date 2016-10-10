@@ -18,5 +18,8 @@
   "bugs": {
     "url": "https://github.com/sniphpet/create-lib/issues"
   },
-  "homepage": "https://github.com/sniphpet/create-lib#readme"
+  "homepage": "https://github.com/sniphpet/create-lib#readme",
+  "dependencies": {
+    "yargs": "^6.0.0"
+  }
 }
