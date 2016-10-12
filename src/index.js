@@ -1,52 +1,41 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
-const path = require('path');
+'use strict';
+
 const yargs = require('yargs');
-const argv = yargs.argv;
-const spawn = require('child_process').spawn;
-const isWin = /^win/.test(process.platform);
 
 yargs.usage('Usage: $0 projectName')
   .demand(1)
   .argv;
-
+/*
+ * Require if yargs
+ * */
+const mkdir = require('fs').mkdir;
+const argv = yargs.argv;
+const spawn = require('child_process').spawn;
+const isWin = /^win/.test(process.platform);
 const projectName = argv._[0];
-
-function dirExist(dir) {
-  try {
-    fs.statSync(dir);
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-function writeToFile(pathName, content) {
-  let data = typeof content === 'object' ? JSON.stringify(content, null,4) : content;
-
-  fs.writeFile(pathName, data, err => err && console.log(err));
-}
-
-if (!dirExist(projectName)) {
-  fs.mkdirSync(projectName);
-} else {
-  throw new Error(`Cannot create ${projectName}, the directory already exist.`);
-}
-
 const config = require('./config').make(projectName);
+const utils = require('./utils');
 
-process.chdir(projectName);
+console.log('Try to create directory');
 
-config.dirToCreate.forEach(dir => fs.mkdirSync(dir));
+mkdir(projectName, (err) => {
+  if (err) {
+    throw err;
+  }
+  process.chdir(projectName);
 
-Object.keys(config.fileToCreate).forEach(k => {
-  let file = config.fileToCreate[k];
-  let pathName = 'undefined' !== typeof file.dir ? path.join(file.dir, file.name) : file.name;
+  console.log(`${projectName} created. Now creating others folders`);
 
-  writeToFile(pathName, file.content);
+  config.dirToCreate.forEach(utils.createDir);
+
+  Object.keys(config.fileToCreate).forEach(k => utils.createFile(config.fileToCreate[k]));
+
 });
 
-const cmd = isWin ? 'npm.cmd' : 'npm';
-const npm = spawn(cmd, ['init'], { stdio: 'inherit' });
 
+//
+// const cmd = isWin ? 'npm.cmd' : 'npm';
+// const npm = spawn(cmd, ['init'], { stdio: 'inherit' });
+//

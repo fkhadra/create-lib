@@ -71,8 +71,7 @@ module.exports = {
 `
         },
         build: {
-          name: 'build.sh',
-          dir: "scripts",
+          name: 'scripts/build.sh',
           content: `#!/bin/sh
 
 rm -rf dist/*
@@ -81,6 +80,27 @@ rm -rf dist/*
 ./node_modules/.bin/webpack --output-filename=dist/${projectName}.min.js --optimize-minimize
 
 ./node_modules/.bin/babel src -d lib`
+        },
+        index: {
+          name: 'src/index.js',
+          content: `console.log('If you see this, it works !');`
+        },
+        gitignore:{
+          name: '.gitignore',
+          content: `node_modules/
+lib/
+npm-debug.log`
+        },
+        npmignore: {
+          name: '.npmignore',
+          content: `src/
+.babelrc
+.eslintrc
+node_modules
+npm-debug.log
+scripts/
+webpack.config.js
+test/`
         }
       }
     }  
