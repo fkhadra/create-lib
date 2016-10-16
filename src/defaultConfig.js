@@ -1,5 +1,4 @@
 module.exports = {
-  isWin: /^win/.test(process.platform),
   dirToCreate: ["src", "scripts", "lib", "test"],
   fileToCreate: {
     babel: {

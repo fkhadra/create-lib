@@ -1,10 +1,11 @@
 
 const fs = require('fs');
 const path = require('path');
+const mkdir = require('mkdirp');
 
 module.exports = {
   createDir(dir){
-    fs.mkdir(dir, (err) => {
+    mkdir(dir, (err) => {
       if (err) {
         throw err;
       }
@@ -14,13 +15,19 @@ module.exports = {
   createFile(file) {
     const { name, content } = file;
     if (typeof name === 'string') {
-      let data = this.sanitizeContent(content)
+      let data = this.sanitizeContent(content);
+      const dirName = path.dirname(name);
 
-      fs.writeFile(name, data, (err) => {
-        if (err) {
-          throw err;
+      fs.stat(dirName, (err) => {
+        if (err && err.code === 'ENOENT') {
+          mkdir.sync(dirName);
         }
-        console.log(`- ${name} created`);
+        fs.writeFile(name, data, (err) => {
+          if (err) {
+            throw err;
+          }
+          console.log(`- ${name} created`);
+        });
       });
     }
   },

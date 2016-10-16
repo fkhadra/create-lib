@@ -2,26 +2,15 @@
 
 'use strict';
 
-const yargs = require('yargs');
-/*
- * Require if yargs
- * */
-const mkdir = require('fs').mkdir;
-const argv = yargs.argv;
-const spawn = require('child_process').spawn;
-const isWin = /^win/.test(process.platform);
-const projectName = argv._[0];
-const config = require('./config').make(projectName);
-const utils = require('./utils');
-
-yargs
-  .usage('Usage: $0 <command> [options]')
-  .command('lib-name','Create the lib folder with the given name')
-  .example('$0 foobar --git-init=true --npm-init=true', 'Same as $0 foobar')
-  .default('git-init', true, 'Init a new git repository')
-  .default('npm-init', true, 'Run npm init')
+const argv = require('yargs')
+  .usage('Usage: $0 lib-name [options]')
+  //.usage('Usage: $0 <command> ')
+  .command('list-config', 'Edit the configuration')
+  .command('edit-config', 'Edit the configuration')
+  .command('reset-config', 'Reset the config')
+  .example('$0 my-lib-name')
   .default('verbose', 0, 'Verbose')
-  .boolean(['git-init', 'npm-init', 'v'])
+  .boolean(['v'])
   .demand(1)
   .help('h')
   .alias('h', 'help')
@@ -29,26 +18,63 @@ yargs
   .alias('v', 'verbose')
   .argv;
 
+const fs = require('fs');
+const command = argv._[0];
+const spawn = require('child_process').spawn;
+global.isWin = /^win/.test(process.platform);
+const editor = isWin ? 'notepad' : 'vim';
+const path = require('path');
+
+switch (command) {
+  case 'edit-config':
+    const edit = spawn(editor, ['./src/config.js'], {stdio: 'inherit'});
+    edit.on('exit', () => process.exit());
+    break;
+  case 'list-config':
+    const more = spawn('more', [path.join('./src/config.js')], {stdio: 'inherit'});
+    more.on('exit', () => process.exit());
+    break;
+}
 
 
-console.log('Try to create directory');
 
-mkdir(projectName, (err) => {
-  if (err) {
-    throw err;
-  }
-  process.chdir(projectName);
-
-  console.log(`${projectName} created. Now creating others folders`);
-
-  config.dirToCreate.forEach(utils.createDir);
-
-  Object.keys(config.fileToCreate).forEach(k => utils.createFile(config.fileToCreate[k]));
-
-});
+const projectName = argv._[0];
+global.PROJECT_NAME = projectName;
+//const config = require('./config');
+const createLib = require('./createLib');
+const git = require('./git');
+const npm = require('./npm');
 
 
+
+
+// createLib
+//   .init(projectName)
+//  .then(git.init)
+// .then(git.addRemoteOrigin)
+// .then(npm.init)
+//.then(() => console.log('youou'))
+//.catch( err => console.log(err));
+// new Promise((res) => {
+//   mkdir(projectName, (err) => {
+//     if (err) {
+//       throw err;
+//     }
+//     process.chdir(projectName);
 //
-// const cmd = isWin ? 'npm.cmd' : 'npm';
-// const npm = spawn(cmd, ['init'], { stdio: 'inherit' });
+//     console.log(`${projectName} created. Now creating others folders`);
 //
+//     config.dirToCreate.forEach(utils.createDir);
+//
+//     Object.keys(config.fileToCreate).forEach(k => utils.createFile(config.fileToCreate[k]));
+//
+//     res();
+//
+//   })
+// })
+// .then(() => {
+//   gitInit();
+// });
+
+
+

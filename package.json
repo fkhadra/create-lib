@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/sniphpet/create-lib#readme",
   "dependencies": {
+    "colors": "^1.1.2",
+    "mkdirp": "^0.5.1",
     "yargs": "^6.0.0"
   }
 }
