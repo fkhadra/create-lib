@@ -1,11 +1,13 @@
 const spawn = require('child_process').spawn;
+const spawnSync = require('child_process').spawnSync;
 const fs = require('fs');
 const config = require('./config');
+const npmCli = IS_WIN ? 'npm.cmd' : 'npm';
 
 module.exports = {
   init() {
     return new Promise((resolve, reject) => {
-      const npm = spawn('npm', ['init', '-y']);
+      const npm = spawn(npmCli, ['init', '-y']);
       //silent stdout
       npm.on('error', err => reject(err));
       npm.on('exit', () => {
@@ -27,6 +29,19 @@ module.exports = {
           })
         })
       });
+    });
+  },
+  install() {
+    return new Promise((resolve, reject) => {
+      if (config.npm.dependencies.length > 0) {
+        const opts = [].concat('i',config.npm.dependencies, '-S');
+        const npm = spawnSync(npmCli, opts, {stdio: 'inherit'});
+      }
+      if (config.npm.devDependencies.length > 0) {
+        const opts = [].concat('i',config.npm.devDependencies, '-D');
+        const npm = spawnSync(npmCli, opts, {stdio: 'inherit'});
+      }
+      resolve();
     });
   }
 };

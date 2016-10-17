@@ -1,3 +1,4 @@
+//default conf
 module.exports = {
   dirToCreate: ["src", "scripts", "lib", "test"],
   fileToCreate: {
@@ -49,9 +50,9 @@ module.exports = {
     historyApiFallback: true
   },
   output: {
-    filename: 'dist/${global.PROJECT_NAME}.js',
+    filename: 'dist/${PROJECT_NAME}.js',
     libraryTarget: 'umd',
-    library: '${global.PROJECT_NAME}'
+    library: '${PROJECT_NAME}'
   },
   module: {
     loaders: [
@@ -95,8 +96,8 @@ test/
 
 rm -rf dist/*
 
-./node_modules/.bin/webpack --output-filename=dist/${global.PROJECT_NAME}.js
-./node_modules/.bin/webpack --output-filename=dist/${global.PROJECT_NAME}.min.js --optimize-minimize
+./node_modules/.bin/webpack --output-filename=dist/${PROJECT_NAME}.js
+./node_modules/.bin/webpack --output-filename=dist/${PROJECT_NAME}.min.js --optimize-minimize
 
 ./node_modules/.bin/babel src -d lib`
     },

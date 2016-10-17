@@ -1,4 +1,4 @@
-
+const colors = require('colors');
 const fs = require('fs');
 const path = require('path');
 const mkdir = require('mkdirp');
@@ -9,11 +9,11 @@ module.exports = {
       if (err) {
         throw err;
       }
-      console.log(`- ${dir} created`);
+      console.log(`- ${dir} created`.blue);
     });
   },
   createFile(file) {
-    const { name, content } = file;
+    const {name, content} = file;
     if (typeof name === 'string') {
       let data = this.sanitizeContent(content);
       const dirName = path.dirname(name);
@@ -26,7 +26,7 @@ module.exports = {
           if (err) {
             throw err;
           }
-          console.log(`- ${name} created`);
+          console.log(`- ${name} created`.blue);
         });
       });
     }
@@ -35,8 +35,8 @@ module.exports = {
     let data = content;
 
     if (typeof content === 'object') {
-      data = JSON.stringify(content, null,4)
-    } else if(typeof content === 'undefined') {
+      data = JSON.stringify(content, null, 4)
+    } else if (typeof content === 'undefined') {
       data = '';
     }
 

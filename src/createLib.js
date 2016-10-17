@@ -9,14 +9,10 @@ module.exports = {
         if (err) {
           reject(err);
         }
+
         process.chdir(projectName);
-
-//        INFO(`${projectName} created. Now creating others folders`);
-
         config.dirToCreate.forEach(utils.createDir);
-
         Object.keys(config.fileToCreate).forEach(k => utils.createFile(config.fileToCreate[k]));
-
         resolve();
       });
     })
